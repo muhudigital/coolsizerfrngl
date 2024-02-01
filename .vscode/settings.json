@@ -1,0 +1,8 @@
+{
+  "eslint.workingDirectories": [
+    "./packages/ui",
+    "./packages/eslint-config",
+    "./packages/typescript-config",
+    "./apps/*"
+  ]
+}
