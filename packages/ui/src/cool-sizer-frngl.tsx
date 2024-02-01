@@ -9,6 +9,7 @@ import {
 } from "react";
 import { twMerge } from "tailwind-merge";
 import { calculateNewRect } from "./utils/calculateNewRect";
+import { getElementOffset } from "./utils/getElementOffset";
 
 type Direction = "x" | "y" | "xy";
 
@@ -44,8 +45,13 @@ export const CoolSizerFrngl = ({
     (e: MouseEvent) => {
       if (!containerRef.current) return;
 
-      const { offsetLeft, offsetTop, offsetHeight, offsetWidth } =
-        containerRef.current;
+      // We use the container's width and height as a default value in case we dind't resize it yet
+      // This is because the container can be rendered at content's size.
+      const { offsetHeight, offsetWidth } = containerRef.current;
+
+      // We calculate the offset of the container relative to the document as a base of the calculation
+      const { offsetLeft, offsetTop } = getElementOffset(containerRef.current);
+
       const currentheight = offsetHeight ?? 0;
       const currentWidth = offsetWidth ?? 0;
       const direction = directionRef.current;
@@ -76,6 +82,8 @@ export const CoolSizerFrngl = ({
     document.removeEventListener("mouseup", handleMouseUp);
   }, [handleMouseMove]);
 
+  // onMouseDown we attach the mousemove function to a document instead of the container or resizer.
+  // This is because we want to be able to resize the container even if the mouse is outside of it.
   const handleMouseDownX = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       e.preventDefault();

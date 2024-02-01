@@ -3,6 +3,8 @@ export type Rect = {
   height: number;
 };
 
+// Calculate new width and height for a resizable element. The calculation is
+// based on position of the element to avoid issues with difference calculation.
 export function calculateNewRect(
   prevRect: Rect,
   clientX: number,
